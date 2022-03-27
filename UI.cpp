@@ -9,31 +9,30 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-UI::UI(Services services) {
-    this->services = services;
-}
+UI::UI(Services &services) : services{services} {}
 
 void UI::run() {
     int option;
     while(true) {
         cout << "1.Admin mode" << endl;
         cout << "2.User mode" << endl;
-        cout << "3.Exit";
+        cout << "3.Exit"<<endl;
         cin >> option;
         if (option == 1)
             adminMenu();
         else if(option == 2)
-            addToWatchlist();
+            userMenu();
         else if(option == 3)
             break;
     }
 }
 
 void UI::printAdminMenu() {
+    cout<<"0. Exit"<<endl;
     cout<<"1.Add a new movie"<<endl;
     cout<<"2.Remove a movie from the database"<<endl;
-    cout<<"3.Edit a movie";
-    cout<<"4.Print all movies";
+    cout<<"3.Edit a movie"<<endl;
+    cout<<"4.Print all movies"<<endl;
 }
 
 void UI::adminMenu() {
@@ -50,29 +49,34 @@ void UI::adminMenu() {
             printOperationResult(removeMovieUI());
         else if(option == 3)
             printOperationResult((changeMovieUI()));
+        else if(option == 4)
+            printAllMovies();
     }
 
 }
 
 void UI::printOperationResult(int result) {
     if(result == 0)
-        cout<<"Successful";
+        cout<<"Successful"<<endl;
     else if(result == 1)
-        cout<<"Not successful";
+        cout<<"Not successful"<<endl;
     else if(result == 2)
-        cout<<"Invalid input data";
+        cout<<"Invalid input data"<<endl;
 
 }
 
 int UI::addMovieUI() {
     std::string title, genre, trailerLink;
     int likeCount, releaseYear;
-    cout<<"Title ";
-    getline(cin, title);
+    cout<<"Title: ";
+    //getline(cin, title);
+    cin>>title;
     cout<<"Genre: ";
-    getline(cin, genre);
+    //getline(cin, genre);
+    cin>>genre;
     cout<<"Link to the trailer: ";
-    getline(cin, trailerLink);
+    //getline(cin, trailerLink);
+    cin>>trailerLink;
     cout<<"Number of likes: ";
     cin>>likeCount;
     cout<<"Year of release: ";
@@ -83,7 +87,8 @@ int UI::addMovieUI() {
 int UI::removeMovieUI(){
     std::string title;
     cout<<"Movie title: ";
-    getline(cin, title);
+    //getline(cin, title);
+    cin>>title;
     return this->services.removeFromDatabase(title);
 }
 
@@ -91,13 +96,17 @@ int UI::changeMovieUI(){
     std::string initialTitle, newTitle, newGenre, newLink;
     int likeCount, releaseYear;
     cout<<"Movie title: ";
-    getline(cin, initialTitle);
+    //getline(cin, initialTitle);
+    cin>>initialTitle;
     cout<<"New title: ";
-    getline(cin, newTitle);
+    //getline(cin, newTitle);
+    cin>>newTitle;
     cout<<"New genre: ";
-    getline(cin, newGenre);
+    //getline(cin, newGenre);
+    cin>>newGenre;
     cout<<"New link: ";
-    getline(cin, newLink);
+    //getline(cin, newLink);
+    cin>>newLink;
     cout<<"Number of likes: ";
     cin>>likeCount;
     cout<<"Year of release: ";
@@ -109,8 +118,8 @@ int UI::changeMovieUI(){
 
 void UI::printAllMovies() {
     DynamicVector<Movie> movieList;
-    movieList = this->services.getMoviesByGenre("");
-    for(int i = 0; i< movieList.getSize(); i++){
+    movieList = this->services.getMoviesByGenre("*");
+    for(int i = 0; i < movieList.getSize(); i++){
         cout<<movieList[i].toString()<<endl;
     }
 }
@@ -118,14 +127,21 @@ void UI::printAllMovies() {
 void UI::addToWatchlist() {
     DynamicVector<Movie> allMovies;
     std::string genre;
-    std::getline(cin, genre);
-    allMovies = this->services.getMoviesByGenre(genre);
     int option;
     int counter = 0;
+    cout<<"Genre: ";
+    cin>>genre;
+    allMovies = this->services.getMoviesByGenre(genre);
+    while(allMovies.getSize() == 0) {
+        cout << "No movies in that category" << endl;
+        cin>>genre;
+        allMovies = this->services.getMoviesByGenre(genre);
+    }
+
     while(true){
         cout<<allMovies[counter].toString()<<endl;
-        // open trailer
-        cout<<"1. Save movie"<<endl<<"2. Next movie"<<endl<<"3. Stop cycling";
+        allMovies[counter].playTrailer();
+        cout<<"1. Save movie"<<endl<<"2. Next movie"<<endl<<"3. Stop cycling"<<endl;
         cin>>option;
         if(option == 1)
             this->watchList.add(allMovies[counter]);
@@ -156,9 +172,13 @@ void UI::userMenu() {
 }
 
 void UI::removeFromWatchlist() {
-    std::string title;
+    std::string title, like;
     cout<<"Title: ";
-    std::getline(cin, title);
+    cin>>title;
+    cout<<"Did you like the movie? (y/n)"<<endl;
+    cin>>like;
+    if(like == "y")
+        this->services.likeMovie(title);
     printOperationResult(this->services.removeFromList(this->watchList, title));
 }
 
@@ -169,7 +189,7 @@ void UI::printWatchlist() {
 }
 
 void UI::printUserMenu() {
-    cout<<"0. Quit";
+    cout<<"0. Quit"<<endl;
     cout<<"1. Add movies to watchlist"<<endl;
     cout<<"2. Remove movie from watchlist"<<endl;
     cout<<"3. Print the watch list"<<endl;

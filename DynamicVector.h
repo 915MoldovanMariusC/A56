@@ -11,9 +11,6 @@
 #include "Domain.h"
 
 
-
-#pragma once
-
 template <typename T>
 class DynamicVector
 {
@@ -139,29 +136,3 @@ int DynamicVector<T>::getSize() const
 {
     return this->size;
 }
-
-
-/*
-
-typedef void* TElem;
-
-class DynamicVector{
-private:
-    int length;
-    int capacity;
-    TElem* elements;
-public:
-
-    DynamicVector(int capacity);
-
-    int add(TElem element);
-
-    int find(TElem element);
-
-    int remove(int index);
-
-    int size() const;
-
-    int modify(TElem element, int index) const;
-};
-*/

@@ -32,8 +32,9 @@ public:
 
     DynamicVector<Movie> getAll();
 
+    Movie getElement(std::string title);
 
-
+    void increaseLikes(std::string title);
 };
 
 

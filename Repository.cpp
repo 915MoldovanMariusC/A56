@@ -50,6 +50,14 @@ DynamicVector<Movie> Repository::getAll() {
     return this->data;
 }
 
+Movie Repository::getElement(std::string title) {
+    return this->data[find(title)];
+}
+
+void Repository::increaseLikes(std::string title) {
+    this->data[find(title)].increaseLikes(1);
+}
+
 
 
 

@@ -4,11 +4,9 @@
 
 #include "Services.h"
 
-Services::Services(Repository repository) {
-    this->repository = repository;
-}
+Services::Services(Repository &repository) : repository{repository} {}
 
-int Services::addToDatabase(std::string title, std::string genre, long long int likeCount, int releaseYear,
+int Services::addToDatabase(std::string title, std::string genre, long long likeCount, int releaseYear,
                             std::string trailerLink) {
     if(releaseYear < 0)
         return 2;
@@ -28,8 +26,8 @@ int Services::changeMovie(std::string initialTitle, std::string newTitle, std::s
 
 DynamicVector<Movie> Services::getMoviesByGenre(std::string genre) {
     DynamicVector<Movie> movieList, allMovies = this->repository.getAll();
-    if(genre == "")
-        return movieList;
+    if(genre == "*")
+        return allMovies;
     for(int i = 0; i < allMovies.getSize(); i++){
         if(allMovies[i].getGenre() == genre){
             movieList.add(allMovies[i]);
@@ -38,7 +36,7 @@ DynamicVector<Movie> Services::getMoviesByGenre(std::string genre) {
     return movieList;
 }
 
-int Services::removeFromList(DynamicVector<Movie> list, std::string title) {
+int Services::removeFromList(DynamicVector<Movie> &list, std::string title) {
     for(int i = 0; i < list.getSize(); i++){
         if(list[i].getTitle() == title){
             list.remove(i);
@@ -47,6 +45,10 @@ int Services::removeFromList(DynamicVector<Movie> list, std::string title) {
     }
 
     return 1;
+}
+
+void Services::likeMovie(std::string title) {
+    this->repository.increaseLikes(title);
 }
 
 

@@ -8,14 +8,15 @@
 #define MOVIES_SERVICES_H
 
 #endif //MOVIES_SERVICES_H
+#pragma once
 
 
 class Services{
 private:
-    Repository repository;
+    Repository &repository;
 public:
 
-    Services(Repository repository);
+    Services(Repository &repository);
 
     int addToDatabase(std::string title, std::string genre, long long likeCount, int releaseYear, std::string trailerLink);
 
@@ -25,7 +26,9 @@ public:
 
     DynamicVector<Movie> getMoviesByGenre(std::string genre);
 
-    int removeFromList(DynamicVector<Movie> list, std::string title);
+    int removeFromList(DynamicVector<Movie> &list, std::string title);
+
+    void likeMovie(std::string title);
 
 
 };

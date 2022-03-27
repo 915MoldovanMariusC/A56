@@ -1,7 +1,7 @@
 //
 // Created by Radu on 3/26/2022.
 //
-
+#pragma once
 #include "Services.h"
 
 #ifndef MOVIES_UI_H
@@ -12,11 +12,11 @@
 
 class UI{
 private:
-    Services services;
+    Services &services;
     DynamicVector<Movie> watchList;
 public:
 
-    UI(Services services);
+    UI(Services &services);
 
     void run();
 

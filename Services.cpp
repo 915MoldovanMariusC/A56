@@ -24,8 +24,8 @@ int Services::changeMovie(std::string initialTitle, std::string newTitle, std::s
     return this->repository.replace(initialTitle, movie);
 }
 
-DynamicVector<Movie> Services::getMoviesByGenre(std::string genre) {
-    DynamicVector<Movie> movieList, allMovies = this->repository.getAll();
+vector<Movie> Services::getMoviesByGenre(std::string genre) {
+    vector<Movie> movieList, allMovies = this->repository.getAll();
     if(genre == "*")
         return allMovies;
     for(int i = 0; i < allMovies.getSize(); i++){
@@ -36,7 +36,7 @@ DynamicVector<Movie> Services::getMoviesByGenre(std::string genre) {
     return movieList;
 }
 
-int Services::removeFromList(DynamicVector<Movie> &list, std::string title) {
+int Services::removeFromList(vector<Movie> &list, std::string title) {
     for(int i = 0; i < list.getSize(); i++){
         if(list[i].getTitle() == title){
             list.remove(i);

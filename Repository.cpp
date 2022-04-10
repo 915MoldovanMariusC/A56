@@ -4,20 +4,21 @@
 
 #include "Repository.h"
 
-
-Repository::Repository(int capacity) {
-    this->data = DynamicVector<Movie>(capacity);
-}
+//
+//Repository::Repository(int capacity) {
+//    //this->data = DynamicVector<Movie>(capacity);
+//
+//}
 
 int Repository::add(Movie movie) {
     if(find(movie.getTitle()) != -1)
         return 1;
-    this->data.add(movie);
+    this->data.push_back(movie);
     return 0;
 }
 
 int Repository::find(std::string title) {
-    for(int i =0 ;i < this->data.getSize(); i++){
+    for(int i =0 ;i < this->data.size(); i++){
         if(this->data[i].getTitle() == title){
             return i;
         }
@@ -29,12 +30,16 @@ int Repository::remove(std::string title) {
     int movieIndex = find(title);
     if(movieIndex == -1)
         return 1;
-    this->data.remove(movieIndex);
+    //this->data.pop_back(movieIndex);
+    Movie aux = this->data[movieIndex];
+    this->data[movieIndex] = this->data[this->size() - 1];
+    this->data[this->size() - 1];
+    this->data.pop_back();
     return 0;
 }
 
 int Repository::size() const {
-    return this->data.getSize();
+    return this->data.size();
 }
 
 int Repository::replace(std::string title, Movie newMovie) {
@@ -46,7 +51,7 @@ int Repository::replace(std::string title, Movie newMovie) {
     return 0;
 }
 
-DynamicVector<Movie> Repository::getAll() {
+vector<Movie> Repository::getAll() {
     return this->data;
 }
 

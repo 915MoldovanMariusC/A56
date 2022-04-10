@@ -4,6 +4,7 @@
 
 #include "DynamicVector.h"
 #include "Domain.h"
+#include <vector>
 
 #ifndef MOVIES_REPOSITORY_H
 #define MOVIES_REPOSITORY_H
@@ -12,13 +13,16 @@
 
 #pragma once
 
+using std::vector;
+
 class Repository{
 private:
-    DynamicVector<Movie> data;
+    //DynamicVector<Movie> data;
+    vector<Movie> data;
 
 public:
 
-    Repository(int capacity);
+    //Repository(int capacity);
 
     int add(Movie movie);
 
@@ -30,7 +34,7 @@ public:
 
     int find(std::string title);
 
-    DynamicVector<Movie> getAll();
+    vector<Movie> getAll();
 
     Movie getElement(std::string title);
 
